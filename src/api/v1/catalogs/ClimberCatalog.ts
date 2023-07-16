@@ -24,6 +24,16 @@ export default class ClimberCatalog extends Catalog implements IClimberCatalog {
         return this._toClimbers(await Catalog.getConnector().query({ query: sql }));
     }
 
+    async getAllWithVideo(): Promise<Climber[]> {
+        const sql = `
+            select distinct v.climber_id as ID, c.\`name\` as name
+            from video AS v
+            inner join climber AS c on v.climber_id = c.ID;
+        `.replace(/\s+|\n/g, ' ')
+
+        return this._toClimbers(await Catalog.getConnector().query({ query: sql }));
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _toClimbers(result: any): Climber[] {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

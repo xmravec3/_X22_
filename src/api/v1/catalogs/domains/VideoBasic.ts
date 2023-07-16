@@ -3,6 +3,7 @@ export type VideoBasic = {
     title: string,
     video_name: string,
     climber_name: number,
+    climber_id: number,
     date: string,
     attempt: number,
     time: number

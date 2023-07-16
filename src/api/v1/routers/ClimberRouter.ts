@@ -21,5 +21,13 @@ export default () => {
         }
     });
 
+    router.get('/climbersAll', async (request, response) => {
+        try {
+            response.send( await climberCatalog.getAllWithVideo());
+        } catch (error) {
+            response.status(500).send({ error: 'Unknow climbers' });
+        }
+    });
+
     return router;
 };

@@ -20,7 +20,7 @@ export default class VideoCatalog extends Catalog implements IVideoCatalog {
     
     async getAllBasic(): Promise<VideoBasic[]> {
         const sql = `
-            select video.ID, video.title, video.video_name, climber.\`name\` as climber_name, video.\`date\`, video.attempt, video.\`time\`
+            select video.ID, video.title, video.video_name, climber.\`name\` as climber_name, video.climber_id, video.\`date\`, video.attempt, video.\`time\`
             from video
             inner join climber on video.climber_id = climber.ID
             order by video.ID asc;

@@ -181,7 +181,7 @@ try:
     result = []
     # print to get in NODEJS
     for item in distance:
-        result.append({'ID': item[0][0], 'dist': item[1], 'title': item[0][1], 'climber_ID': item[0][3], 'climber_name': item[0][4], 'attempt': item[0][6], 'time': item[0][7], 'date': str(item[0][5]), 'video_path': item[0][2]})
+        result.append({'ID': item[0][0], 'dist': item[1], 'title': item[0][1], 'climber_id': item[0][3], 'climber_name': item[0][4], 'attempt': item[0][6], 'time': item[0][7], 'date': str(item[0][5]), 'video_path': item[0][2]})
 
     json_result = json.dumps(result)
     print(json_result)
