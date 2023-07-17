@@ -50,6 +50,15 @@ export default class VideoCatalog extends Catalog implements IVideoCatalog {
         return this._toVideos(await Catalog.getConnector().query({ query: sql }));
     }
 
+    async getAllDates(): Promise<string[]> {
+        const sql = `
+            select distinct \`date\`
+            from video;
+        `.replace(/\s+|\n/g, ' ')
+
+        return this._toString(await Catalog.getConnector().query({ query: sql }));
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _toVideos(result: any): Video[] {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,6 +75,12 @@ export default class VideoCatalog extends Catalog implements IVideoCatalog {
     private _toVideosInfo(result: any): VideoInfo[] {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return result.map((video: any) => video);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private _toString(result: any): string[] {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return result.map((value: any) => value);
     }
 
     private _getOne(videos: Video[]): Video {

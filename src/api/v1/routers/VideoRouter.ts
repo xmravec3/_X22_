@@ -37,5 +37,13 @@ export default () => {
         }
     });
 
+    router.get('/datesAll', async (request, response) => {
+        try {
+            response.send( await videoCatalog.getAllDates());
+        } catch (error) {
+            response.status(500).send({ error: 'Unknow issue with dates' });
+        }
+    });
+
     return router;
 };

@@ -11,4 +11,6 @@ export default interface IVideoCatalog {
 
     getByIDVideoInfo(id: number): Promise<VideoInfo>
 
+    getAllDates(): Promise<string[]>
+
 }
