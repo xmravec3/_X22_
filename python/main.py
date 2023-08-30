@@ -96,14 +96,17 @@ if __name__ == "__main__":
     #json_result = json.dumps(climbers, cls=NpEncoder)
     #json_result = json.dumps([{'result': climbers}], cls=NpEncoder) WORKING BEFORE DELAY_DATA
 
+    # data needed for Y-axis chart draw
+    index = 0 if len(climbers[0]) < len(climbers[1]) else 1
+    h1, h2 = int(np.min(climbers[index][:, :, 1])), int(np.max(climbers[index][:, :, 1]))
+
     # get data for speed and advantage
     speed = cp.compute_speed(climbers=climbers.copy(), window=25, rate=50)
     speed_diff = list(map(lambda x, y: y - x, speed[0], speed[1]))
     indc_diff = cp.get_advantage_clm(climbers)
     local_adv = cp.local_advantage(climbers)
 
-
-    json_result = json.dumps([{'result': climbers, 'delay_data': delay_points, 'speed_diff': speed_diff, 'indc_diff': indc_diff, 'local_adv': local_adv}], cls=NpEncoder) 
+    json_result = json.dumps([{'result': climbers, 'delay_data': delay_points, 'speed_diff': speed_diff, 'indc_diff': indc_diff, 'local_adv': local_adv, 'min_y': h1, 'max_y': h2}], cls=NpEncoder) 
     #json_result = [{'result': climbers, 'delay_data': delay_points}]
 
     print(json_result)
