@@ -1,5 +1,6 @@
 import { Router as expressRouter } from 'express';
 import { spawn } from 'child_process';
+import path from 'path';
 //import { cwd } from 'node:process';
 
 export default () => {
@@ -8,8 +9,12 @@ export default () => {
     router.get('/knn/:id', async (request, response) => {
 
         try {
+            console.log('Current CWD is:')
+            const pythonScriptPath = path.join(process.cwd(), 'getKNNForDB.py');
+            console.log(pythonScriptPath)
+
             //console.log(`Current directory: ${cwd()}`);
-            const python = spawn('python3', ['getKNNForDB.py', request.params.id]);
+            const python = spawn('python3', [pythonScriptPath, request.params.id]);
             const result: any[] = [];
             //let result = [];
 
