@@ -9,7 +9,7 @@ export default () => {
 
         try {
             //console.log(`Current directory: ${cwd()}`);
-            const python = spawn('python', ['getKNNForDB.py', request.params.id]);
+            const python = spawn('python3', ['getKNNForDB.py', request.params.id]);
             const result: any[] = [];
             //let result = [];
 

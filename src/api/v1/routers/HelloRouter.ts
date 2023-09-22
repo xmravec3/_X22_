@@ -16,7 +16,7 @@ export default () => {
             console.log(pythonScriptPath)
             
             console.log('*********************************')
-            const python = spawn('python', [pythonScriptPath]);
+            const python = spawn('python3', [pythonScriptPath]);
             const result: any[] = [];
             //let result = [];
 
