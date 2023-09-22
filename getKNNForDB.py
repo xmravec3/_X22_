@@ -134,7 +134,7 @@ knn_id = sys.argv[1]
 
 try:
     connection = mysql.connector.connect(
-        host="127.0.0.1",
+        host="mysql_db",
         user="root",
         password="root",
         database="eso"
