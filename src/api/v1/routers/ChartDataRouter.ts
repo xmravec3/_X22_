@@ -17,10 +17,10 @@ export default () => {
 
             const pythonCommand = String(process.env.PYTHON_COMMAND);
             console.log('Python command path: ', pythonCommand);
-            
+
             console.log('*********************************')
 
-            const python = spawn('pythonCommand', [pythonScriptPath, request.params.l_id, request.params.r_id], { shell: true });
+            const python = spawn(pythonCommand, [pythonScriptPath, request.params.l_id, request.params.r_id], { shell: true });
             const result: any[] = [];
             //let result = '';
             //let result = [];
@@ -38,15 +38,15 @@ export default () => {
                 if (code !== 0) {
                     console.error(`Python script exited with code ${code}`);
                     response.status(500).send({ error: 'Python issue' }); // added
-                return;
-            }
-  
-            const jsonResult = Buffer.concat(result).toString();
-            //const parsedResult = JSON.parse(result);
-            const parsedResult = JSON.parse(jsonResult);
-  
-            response.send(parsedResult);
-        })
+                    return;
+                }
+
+                const jsonResult = Buffer.concat(result).toString();
+                //const parsedResult = JSON.parse(result);
+                const parsedResult = JSON.parse(jsonResult);
+
+                response.send(parsedResult);
+            })
         } catch (error) {
             response.status(500).send({ error: 'Unknow id of video' });
         }
