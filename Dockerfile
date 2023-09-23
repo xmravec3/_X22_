@@ -1,8 +1,8 @@
-FROM node:20
+FROM node:20-slim
 
 # install system-wide deps for python and node
 RUN apt-get -yqq update
-RUN apt-get -yqq install python3 python3-venv python3-pip curl
+RUN apt-get -yqq install python3 python3-venv python3-pip
 RUN python3 -m venv /opt/venv
 
 # create address file, where app will be
