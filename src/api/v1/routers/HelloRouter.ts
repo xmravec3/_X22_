@@ -1,6 +1,7 @@
 import { Router as expressRouter } from 'express';
 import { spawn } from 'child_process';
 import path from 'path';
+import 'dotenv/config';
 //import { cwd } from 'node:process';
 
 export default () => {
@@ -14,9 +15,12 @@ export default () => {
             console.log('Current CWD is:')
             const pythonScriptPath = path.join(process.cwd(), 'pythonTest', 'main.py');
             console.log(pythonScriptPath)
+
+            const pythonCommand = String(process.env.PYTHON_COMMAND);
+            console.log('Python command path: ', pythonCommand);
             
             console.log('*********************************')
-            const python = spawn('python3', [pythonScriptPath]);
+            const python = spawn(pythonCommand, [pythonScriptPath], { shell: true });
             const result: any[] = [];
             //let result = [];
 

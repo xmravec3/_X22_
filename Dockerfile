@@ -9,17 +9,15 @@ RUN python3 -m venv /opt/venv
 WORKDIR /usr/src/app
 
 # install dependencies
-COPY package*.json ./
+COPY package*.json jest.config.ts tsconfig.json requirements.txt getKNNForDB.py python pythonTest src .env ./
 RUN npm install
+RUN npm run build
 
 # !! maybe needed install dependencies for python code
 # !!!!!!!!!!
 # copy code into container
-COPY requirements.txt .
 
 RUN /opt/venv/bin/pip3 install -r requirements.txt
-
-COPY . .
 
 #RUN /opt/venv/bin/pip3 install mysql-connector-python
 #RUN /opt/venv/bin/pip3 install jsonschema
