@@ -2,6 +2,7 @@ import { Router as expressRouter } from 'express';
 import { spawn } from 'child_process';
 import path from 'path';
 import 'dotenv/config';
+import Cache from '../../common/cache/Cache';
 //import { cwd } from 'node:process';
 
 export default () => {
@@ -9,7 +10,17 @@ export default () => {
 
     router.get('/knn/:id', async (request, response) => {
 
+        const id = request.params.id;
+
+        const cacheKey = `knn-${id}`;
+
         try {
+            const jsonString = await Cache.get().get(cacheKey);
+
+            if (jsonString) {
+                return response.send(JSON.parse(jsonString));
+            }
+
             console.log('Current CWD is:')
             const pythonScriptPath = path.join(process.cwd(), 'getKNNForDB.py');
             console.log(pythonScriptPath)
@@ -18,7 +29,7 @@ export default () => {
             console.log('Python command path: ', pythonCommand);
 
             //console.log(`Current directory: ${cwd()}`);
-            const python = spawn(pythonCommand, [pythonScriptPath, request.params.id], { shell: true });
+            const python = spawn(pythonCommand, [pythonScriptPath, id], { shell: true });
             const result: any[] = [];
             //let result = [];
 
@@ -29,7 +40,7 @@ export default () => {
             })
 
             // in close event we are sure that stream is from child process is closed
-            python.on('close', (code) => {
+            python.on('close', async (code) => {
                 console.log(`child process close all stdio with code ${code}`)
                 if (code !== 0) {
                     console.error(`Python script exited with code ${code}`);
@@ -38,6 +49,9 @@ export default () => {
             }
   
             const jsonResult = Buffer.concat(result).toString();
+
+            await Cache.get().set(cacheKey, jsonResult);
+
             const parsedResult = JSON.parse(jsonResult);
   
             response.send(parsedResult);

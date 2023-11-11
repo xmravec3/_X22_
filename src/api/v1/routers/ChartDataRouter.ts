@@ -3,13 +3,25 @@ import { spawn } from 'child_process';
 //import { cwd } from 'node:process';
 import path from 'path';
 import 'dotenv/config';
+import Cache from '../../common/cache/Cache';
 
 export default () => {
     const router = expressRouter();
 
     router.get('/chartData/:l_id/:r_id', async (request, response) => {
 
+        const leftId = request.params.l_id;
+        const rightId = request.params.r_id;
+
+        const cacheKey = `chartData-${leftId}-${rightId}`;
+
         try {
+            const jsonString = await Cache.get().get(cacheKey);
+
+            if (jsonString) {
+                return response.send(JSON.parse(jsonString));
+            }
+
             //console.log(`Current directory: ${cwd()}`);
             console.log('Current CWD is:')
             const pythonScriptPath = path.join(process.cwd(), 'python', 'main.py');
@@ -20,7 +32,7 @@ export default () => {
 
             console.log('*********************************')
 
-            const python = spawn(pythonCommand, [pythonScriptPath, request.params.l_id, request.params.r_id], { shell: true });
+            const python = spawn(pythonCommand, [pythonScriptPath, leftId, rightId], { shell: true });
             const result: any[] = [];
             //let result = '';
             //let result = [];
@@ -33,7 +45,7 @@ export default () => {
             })
 
             // in close event we are sure that stream is from child process is closed
-            python.on('close', (code) => {
+            python.on('close', async (code) => {
                 console.log(`child process close all stdio with code ${code}`)
                 if (code !== 0) {
                     console.error(`Python script exited with code ${code}`);
@@ -42,7 +54,9 @@ export default () => {
                 }
 
                 const jsonResult = Buffer.concat(result).toString();
-                //const parsedResult = JSON.parse(result);
+
+                await Cache.get().set(cacheKey, jsonResult);
+
                 const parsedResult = JSON.parse(jsonResult);
 
                 response.send(parsedResult);
